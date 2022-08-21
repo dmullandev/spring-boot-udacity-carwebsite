@@ -119,8 +119,6 @@ class CarController {
     ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             carService.delete(id);
-
-            // return ResponseEntity.noContent().build();
             return ResponseEntity.ok("Vehicle deleted successfully");
         } catch (CarNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
