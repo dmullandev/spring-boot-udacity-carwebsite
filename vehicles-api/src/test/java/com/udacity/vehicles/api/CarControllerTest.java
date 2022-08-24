@@ -5,6 +5,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
@@ -88,11 +90,14 @@ public class CarControllerTest {
      */
     @Test
     public void updateCar() throws Exception {
+        Long id = 5L;
         Car car = getCar();
-        car.setId(1L);
-        mvc.perform(post(new URI("/cars")).content(json.write(car).getJson())
+        car.setId(id);
+        car.setPrice("5000");
+        given(carService.save(any())).willReturn(car);
+        mvc.perform(put(new URI("/cars/" + id)).content(json.write(car).getJson())
                 .contentType(MediaType.APPLICATION_JSON_UTF8).accept(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     /**
